@@ -22,9 +22,8 @@ if not exist "%1\python312.lib" (
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\Lib %1\lib /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\Include %1\include /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
   copy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PC\pyconfig.h %1\include
-  FOR %%E IN (
-    py.exe python.exe python3.dll python312.dll python312.lib pythonw.exe pyw.exe venvlauncher.exe venvwlauncher.exe _testembed.exe
-  ) DO move "%1\DLLs\%%E" %1
+  move "%1\DLLs\python.exe" %1
+  move "%1\DLLs\python3*.dll" %1
   set PYTHONHOME=%~1
   %1\python -m ensurepip
 )
