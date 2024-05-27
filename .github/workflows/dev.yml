@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  build_python:
+    runs-on: ${{ matrix.platform }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - ubuntu-20.04
+          - ubuntu-22.04
+          - ubuntu-24.04
+          - macos-11
+          - macos-14
+          - windows-2019
+          - windows-2022
+        python-version:
+          - 3.10.14
+          - 3.12.3
+
+    env:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      PYTHON_BUILD: ${{ github.workspace }}/build
+      PYTHON_DIST: ${{ github.workspace }}/dist
+      PYTHON_TARGET: ${{ github.workspace }}/output
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Python dist files
+        id: python-dist
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PYTHON_DIST }}
+          key: ${{ matrix.platform }}-${{ matrix.python-version }}
+      - name: Build Python (POSIX)
+        run: bash build_python.sh ${{ env.PYTHON_TARGET }}
+        if: runner.os != 'Windows'
+      - name: Build Python (Windows)
+        run: build_python.bat ${{ env.PYTHON_TARGET }}
+        if: runner.os == 'Windows'
+      - name: Test (POSIX)
+        run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
+        if: runner.os != 'Windows'
+      - name: Test (Windows)
+        run: ${{ env.PYTHON_TARGET }}\python -E -s -c "import sys; print(sys.path)"
+        if: runner.os == 'Windows'
