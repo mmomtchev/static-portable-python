@@ -44,6 +44,7 @@ jobs:
         if: runner.os != 'Windows'
       - name: Build Python (Windows)
         run: build_python.bat ${{ env.PYTHON_TARGET }}
+        shell: cmd
         if: runner.os == 'Windows'
       - name: Test (POSIX)
         run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
