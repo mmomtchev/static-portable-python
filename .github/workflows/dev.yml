@@ -7,7 +7,7 @@ on:
     branches: main
 
 jobs:
-  build_python:
+  build_python_posix:
     runs-on: ${{ matrix.platform }}
 
     strategy:
@@ -19,8 +19,6 @@ jobs:
           - ubuntu-24.04
           - macos-11
           - macos-14
-          - windows-2019
-          - windows-2022
         python-version:
           - 3.10.14
           - 3.12.3
@@ -38,17 +36,42 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.PYTHON_DIST }}
-          key: ${{ matrix.platform }}-${{ matrix.python-version }}
-      - name: Build Python (POSIX)
+          key: ${{ matrix.python-version }}
+      - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
-        if: runner.os != 'Windows'
-      - name: Build Python (Windows)
+      - name: Test
+        run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
+
+
+  build_python_winows:
+    runs-on: ${{ matrix.platform }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - windows-2019
+          - windows-2022
+        python-version:
+          - 3.10.14
+          - 3.12.3
+
+    env:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      PYTHON_BUILD: ${{ github.workspace }}\build
+      PYTHON_DIST: ${{ github.workspace }}\dist
+      PYTHON_TARGET: ${{ github.workspace }}\output
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Python dist files
+        id: python-dist
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PYTHON_DIST }}
+          key: ${{ matrix.python-version }}
+      - name: Build Python
         run: build_python.bat ${{ env.PYTHON_TARGET }}
         shell: cmd
-        if: runner.os == 'Windows'
-      - name: Test (POSIX)
-        run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
-        if: runner.os != 'Windows'
-      - name: Test (Windows)
+      - name: Test
         run: ${{ env.PYTHON_TARGET }}\python -E -s -c "import sys; print(sys.path)"
-        if: runner.os == 'Windows'
