@@ -3,6 +3,9 @@
 set -x
 unset MAKEFLAGS
 
+cd `dirname $0`
+ROOT=`pwd`
+
 mkdir -p ${PYTHON_DIST}
 if [ ! -r ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz ]; then
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz --output ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
@@ -27,7 +30,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   tar -C ${PYTHON_BUILD} -zxf ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
   (
     cd ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
-    patch < ../../patches/python-${SHORT_VERSION}-configure.patch
+    patch < ${ROOT}/patches/python-${SHORT_VERSION}-configure.patch
 
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
