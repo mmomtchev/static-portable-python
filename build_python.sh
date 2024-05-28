@@ -8,9 +8,11 @@ if [ ! -r ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz ]; then
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz --output ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
 fi
 
+SHORT_VERSION=`echo ${PYTHON_VERSION} | cut -f 1,2 -d "."`
+
 case `uname` in
-  'Linux') LIBNAME="$1/lib/libpython3.12.so" ;;
-  'Darwin') LIBNAME="$1/lib/libpython3.12.dylib" ;;
+  'Linux') LIBNAME="$1/lib/libpython${SHORT_VERSION}.so" ;;
+  'Darwin') LIBNAME="$1/lib/libpython${SHORT_VERSION}.dylib" ;;
   *) echo 'Unsupported platform for the builtin Python interpreter'
      exit 1
      ;;
@@ -25,7 +27,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   tar -C ${PYTHON_BUILD} -zxf ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
   (
     cd ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
-    patch < ../../patches/python-3.12-configure.patch
+    patch < ../../patches/python-${SHORT_VERSION}-configure.patch
 
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
@@ -50,6 +52,6 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     make install
   )
   rm -f $1/python
-  [ ! -r $1/bin/python3 ] && ln -s python3.12 $1/bin/python3
+  [ ! -r $1/bin/python3 ] && ln -s python${SHORT_VERSION} $1/bin/python3
   ln -s bin/python3 $1/python
 fi

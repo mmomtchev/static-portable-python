@@ -11,7 +11,7 @@ if not exist %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz (
   curl https://www.python.org/ftp/python/%PYTHON_VERSION%/Python-%PYTHON_VERSION%.tgz --output %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz
 )
 
-if not exist "%1\python312.lib" (
+if not exist "%1\python3*.lib" (
   echo building in %1
   rd /q /s %PYTHON_BUILD%\Python-%PYTHON_VERSION%
 
