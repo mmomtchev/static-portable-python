@@ -41,12 +41,15 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
-        export LDFLAGS="-Wl,-rpath,@loader_path/../lib"
-        mkdir -p ../openssl/lib
-        mkdir -p ../openssl/include
-        cp $(brew --prefix openssl@1.1)/lib/*.a ../openssl/lib
-        cp -r $(brew --prefix openssl@1.1)/include/openssl ../openssl/include
-        export SSL="--with-openssl=$(pwd)/../openssl"
+        mkdir -p ${PYTHON_BUILD}/openssl/lib
+        mkdir -p ${PYTHON_BUILD}/openssl/include
+        cp $(brew --prefix openssl@1.1)/lib/*.a ${PYTHON_BUILD}/openssl/lib
+        cp -r $(brew --prefix openssl@1.1)/include/openssl ${PYTHON_BUILD}/openssl/include
+        mkdir -p ${PYTHON_BUILD}/gettext/lib
+        cp $(brew --prefix gettext)/lib/*.a ${PYTHON_BUILD}/gettext/lib
+        export SSL="--with-openssl=${PYTHON_BUILD}/openssl"
+        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib  -Wl,-rpath,@loader_path/../lib"
+        export LIBS="-liconv -framework CoreFoundation"
         ;;
     esac
 

@@ -42,7 +42,15 @@ jobs:
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
       - name: Test
         run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
-
+      - name: Get linked libraries tool
+        id: ldd
+        run: case `uname` in 'Linux') echo 'ldd=ldd' >> $GITHUB_OUTPUT;; 'Darwin') echo 'ldd=otool -L' >> $GITHUB_OUTPUT;; esac
+      - name: Check linked libraries
+        run: |
+          echo 'Main executable'
+          ${{ steps.ldd.outputs.ldd }} ${{ env.PYTHON_TARGET }}/python
+          echo 'Modules'
+          find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \; | egrep -o '\s/[a-zA-Z/][-a-zA-Z0-9_\./]+' | sort | uniq
 
   build_python_winows:
     runs-on: ${{ matrix.platform }}
