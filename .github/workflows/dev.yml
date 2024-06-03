@@ -40,7 +40,9 @@ jobs:
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
       - name: Test
-        run: ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
+        run: |
+          ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
+          ${{ env.PYTHON_TARGET }}/python -E -s -m pip install numpy
       - name: Get linked libraries tool
         id: ldd
         run: case `uname` in 'Linux') echo 'ldd=ldd' >> $GITHUB_OUTPUT;; 'Darwin') echo 'ldd=otool -L' >> $GITHUB_OUTPUT;; esac

@@ -30,7 +30,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   tar -C ${PYTHON_BUILD} -zxf ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
   (
     cd ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
-    patch < ${ROOT}/patches/python-${SHORT_VERSION}-configure.patch
+    for PATCH in ${ROOT}/patches/python-${SHORT_VERSION}-*.patch; do
+      patch < ${PATCH}
+    done
 
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
