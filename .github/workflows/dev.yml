@@ -41,6 +41,8 @@ jobs:
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
       - name: Test
         run: bash test/run_tests.sh
+        env:
+          PYTHON: ${{ env.PYTHON_TARGET }}/python
       - name: Get linked libraries tool
         id: ldd
         run: case `uname` in 'Linux') echo 'ldd=ldd' >> $GITHUB_OUTPUT;; 'Darwin') echo 'ldd=otool -L' >> $GITHUB_OUTPUT;; esac
@@ -84,3 +86,5 @@ jobs:
         shell: cmd
       - name: Test
         run: bash test/run_tests.sh
+        env:
+          PYTHON: ${{ env.PYTHON_TARGET }}/python
