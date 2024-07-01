@@ -27,7 +27,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   echo Getting conan dependencies
   echo ${SEP}
   conan profile detect --exist-ok
-  conan install . -of conan
+  conan install . -of conan --build=missing
   source conan/conanbuild.sh
 
   echo ${SEP}
