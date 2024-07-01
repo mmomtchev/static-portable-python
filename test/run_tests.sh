@@ -1,16 +1,12 @@
 #!/bin/bash
 # From https://medium.matcha.fyi/build-a-simple-testing-framework-with-bash-bcb59aaa6a57
           
-test_path() {
-  ${PYTHON} -E -s -c "import sys; print(sys.path)"
-}
-
 test_numpy() {
-  ${PYTHON} -E -s -m pip install numpy
+  ${PYTHON_TARGET} -E -s -m pip install numpy
 }
 
 test_lzma() {
-  ${PYTHON} -E -s -c "import lzma; assert(type(lzma.compress) == type(lambda x: x))"
+  ${PYTHON_TARGET} -E -s -c "import lzma; assert(type(lzma.compress) == type(lambda x: x))"
 }
 
 run_test() {
@@ -36,10 +32,11 @@ run_all_local_tests() {
 }
 
 main() {
-    if [ -z "${PYTHON}" ]; then
-      PYTHON=`which python`
+    if [ -z "${PYTHON_TARGET}" ]; then
+      PYTHON_TARGET=`which python`
     fi
-    echo "Testing using ${PYTHON}"
+    echo "Testing using ${PYTHON_TARGET}"
+    ${PYTHON_TARGET} -E -s -c "from pprint import pp; import sys; pp(sys.path)"
     echo "============"
     local error_count=0
     run_all_local_tests
