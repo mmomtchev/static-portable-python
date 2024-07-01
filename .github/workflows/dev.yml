@@ -46,7 +46,7 @@ jobs:
       - name: Cache conan artifacts
         uses: actions/cache@v4
         with:
-          path: ${{ steps.conan_home.outputs }}
+          path: ${{ steps.conan_home.outputs.CONAN_HOME }}
           key: ${{ runner.os }}-${{ runner.arch }}
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
