@@ -29,6 +29,9 @@ jobs:
       PYTHON_TARGET: ${{ github.workspace }}/output
 
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
       - uses: actions/checkout@v4
       - name: Cache Python dist files
         id: python-dist
