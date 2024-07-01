@@ -59,6 +59,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       'Linux')
         export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
         export CFLAGS
+        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --libs zlib` -ldl -Wl,-Bdynamic"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
@@ -69,7 +70,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         mkdir -p ${PYTHON_BUILD}/gettext/lib
         cp $(brew --prefix gettext)/lib/*.a ${PYTHON_BUILD}/gettext/lib
         export SSL="--with-openssl=${PYTHON_BUILD}/openssl"
-        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib  -Wl,-rpath,@loader_path/../lib"
+        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
