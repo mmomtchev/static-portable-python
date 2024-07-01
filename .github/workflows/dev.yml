@@ -37,6 +37,17 @@ jobs:
           path: ${{ env.PYTHON_DIST }}
           key: ${{ matrix.python-version }}
           enableCrossOsArchive: true
+      - name: Install conan
+        uses: turtlebrowser/get-conan@main
+      - name: Get conan home
+        id: conan_home
+        shell: bash
+        run: echo CONAN_HOME=`conan config home` >> "$GITHUB_OUTPUT"
+      - name: Cache conan artifacts
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.conan_home.outputs }}
+          key: ${{ runner.os }}-${{ runner.arch }}
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
       - name: Test
@@ -53,7 +64,7 @@ jobs:
           echo 'Modules'
           find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \; | egrep -o '\s/[a-zA-Z/][-a-zA-Z0-9_\./]+' | sort | uniq
 
-  build_python_winows:
+  build_python_windows:
     runs-on: ${{ matrix.platform }}
 
     strategy:

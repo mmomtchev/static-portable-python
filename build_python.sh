@@ -1,5 +1,6 @@
 #!/bin/bash
 
+SEP="============================================="
 set -x
 unset MAKEFLAGS
 
@@ -22,7 +23,16 @@ case `uname` in
 esac
 
 if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
-  echo building in $1
+  echo ${SEP}
+  echo Getting conan dependencies
+  echo ${SEP}
+  conan install . -of conan
+  source conan/conanbuild.sh
+
+  echo ${SEP}
+  echo "Building in $1"
+  echo ${SEP}
+
   rm -rf ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
   rm -rf ${PYTHON_BUILD}/openssl
 
