@@ -57,9 +57,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
       'Linux')
-        export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
+        export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} -Wl,-Bdynamic"
         export CFLAGS
-        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --libs zlib` -ldl -Wl,-Bdynamic"
+        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
