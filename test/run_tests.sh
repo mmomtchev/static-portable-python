@@ -46,6 +46,8 @@ main() {
     else
         echo "$error_count tests failed"
     fi
+    return $error_count
 }
 
 main
+exit $?
