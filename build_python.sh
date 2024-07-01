@@ -1,5 +1,6 @@
 #!/bin/bash
 
+SEP="============================================="
 set -x
 unset MAKEFLAGS
 
@@ -22,7 +23,26 @@ case `uname` in
 esac
 
 if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
-  echo building in $1
+  echo ${SEP}
+  echo Getting conan dependencies
+  echo ${SEP}
+  conan profile detect --exist-ok
+  conan install . -of conan --build=missing
+  source conan/conanbuild.sh
+
+  echo ${SEP}
+  for pkg in zlib bzip2 liblzma; do
+    CFLAGS="${CFLAGS} `pkg-config --cflags ${pkg}`"
+    LDFLAGS="${LDFLAGS} `pkg-config --libs ${pkg}`"
+  done
+  echo "conan CFLAGS=${CFLAGS}"
+  echo "conan LDFLAGS=${LDFLAGS}"
+  echo ${SEP}
+
+  echo ${SEP}
+  echo "Building in $1"
+  echo ${SEP}
+
   rm -rf ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
   rm -rf ${PYTHON_BUILD}/openssl
 
@@ -37,9 +57,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
       'Linux')
-        export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib'"
-        export CFLAGS=""
-        export ZLIB_LIBS="-lz -ldl"
+        export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} -Wl,-Bdynamic"
+        export CFLAGS
+        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
@@ -50,8 +70,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         mkdir -p ${PYTHON_BUILD}/gettext/lib
         cp $(brew --prefix gettext)/lib/*.a ${PYTHON_BUILD}/gettext/lib
         export SSL="--with-openssl=${PYTHON_BUILD}/openssl"
-        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib  -Wl,-rpath,@loader_path/../lib"
-        export LIBS="-liconv -framework CoreFoundation"
+        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
+        export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
 

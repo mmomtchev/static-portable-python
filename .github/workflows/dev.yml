@@ -16,7 +16,7 @@ jobs:
         platform:
           - ubuntu-20.04
           - ubuntu-22.04
-          - macos-11
+          - macos-12
           - macos-14
         python-version:
           - 3.10.14
@@ -29,6 +29,9 @@ jobs:
       PYTHON_TARGET: ${{ github.workspace }}/output
 
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
       - uses: actions/checkout@v4
       - name: Cache Python dist files
         id: python-dist
@@ -37,12 +40,23 @@ jobs:
           path: ${{ env.PYTHON_DIST }}
           key: ${{ matrix.python-version }}
           enableCrossOsArchive: true
+      - name: Install conan
+        uses: turtlebrowser/get-conan@main
+      - name: Get conan home
+        id: conan_home
+        shell: bash
+        run: echo CONAN_HOME=`conan config home` >> "$GITHUB_OUTPUT"
+      - name: Cache conan artifacts
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.conan_home.outputs.CONAN_HOME }}
+          key: ${{ runner.os }}-${{ runner.arch }}
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
       - name: Test
-        run: |
-          ${{ env.PYTHON_TARGET }}/python -E -s -c "import sys; print(sys.path)"
-          ${{ env.PYTHON_TARGET }}/python -E -s -m pip install numpy
+        run: bash test/run_tests.sh
+        env:
+          PYTHON: ${{ env.PYTHON_TARGET }}/python
       - name: Get linked libraries tool
         id: ldd
         run: case `uname` in 'Linux') echo 'ldd=ldd' >> $GITHUB_OUTPUT;; 'Darwin') echo 'ldd=otool -L' >> $GITHUB_OUTPUT;; esac
@@ -53,7 +67,7 @@ jobs:
           echo 'Modules'
           find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \; | egrep -o '\s/[a-zA-Z/][-a-zA-Z0-9_\./]+' | sort | uniq
 
-  build_python_winows:
+  build_python_windows:
     runs-on: ${{ matrix.platform }}
 
     strategy:
@@ -85,4 +99,6 @@ jobs:
         run: build_python.bat ${{ env.PYTHON_TARGET }}
         shell: cmd
       - name: Test
-        run: ${{ env.PYTHON_TARGET }}\python -E -s -c "import sys; print(sys.path)"
+        run: bash test/run_tests.sh
+        env:
+          PYTHON: ${{ env.PYTHON_TARGET }}/python
