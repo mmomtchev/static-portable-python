@@ -31,10 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  for pkg in zlib bzip2 liblzma; do
-    CFLAGS="${CFLAGS} `pkg-config --cflags ${pkg}`"
-    LDFLAGS="${LDFLAGS} `pkg-config --libs ${pkg}`"
-  done
+  PKGS="zlib bzip2 liblzma"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -57,9 +54,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
       'Linux')
-        export LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} -Wl,-Bdynamic"
-        export CFLAGS
-        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --libs zlib` -Wl,-Bdynamic -ldl"
+        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} `pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
+        PKGS="${PKGS} sqlite3 readline"
+        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
@@ -70,10 +67,12 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         mkdir -p ${PYTHON_BUILD}/gettext/lib
         cp $(brew --prefix gettext)/lib/*.a ${PYTHON_BUILD}/gettext/lib
         export SSL="--with-openssl=${PYTHON_BUILD}/openssl"
-        export LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
+        LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
+    export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
+    export LDFLAGS="`pkg-config --static --libs ${PKGS}` ${LDFLAGS}"
 
     ./configure --prefix $1 $2 --enable-optimizations ${SSL}
     make -j4 build_all
