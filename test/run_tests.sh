@@ -13,6 +13,10 @@ test_sqlite3() {
   ${PYTHON} -E -s -c "import sqlite3; assert(type(sqlite3.apilevel) == str)"
 }
 
+test_ssl() {
+  ${PYTHON} -E -s -c 'import urllib.request; contents = urllib.request.urlopen("https://www.duckduckgo.com").read()'
+}
+
 run_test() {
     local test_name=$1
     echo "Testing $test_name"

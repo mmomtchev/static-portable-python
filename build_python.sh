@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma"
+  PKGS="zlib bzip2 liblzma gettext openssl"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -41,7 +41,6 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   echo ${SEP}
 
   rm -rf ${PYTHON_BUILD}/Python-${PYTHON_VERSION}
-  rm -rf ${PYTHON_BUILD}/openssl
 
   mkdir -p ${PYTHON_BUILD}
   tar -C ${PYTHON_BUILD} -zxf ${PYTHON_DIST}/Python-${PYTHON_VERSION}.tgz
@@ -60,13 +59,6 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
-        mkdir -p ${PYTHON_BUILD}/openssl/lib
-        mkdir -p ${PYTHON_BUILD}/openssl/include
-        cp $(brew --prefix openssl@1.1)/lib/*.a ${PYTHON_BUILD}/openssl/lib
-        cp -r $(brew --prefix openssl@1.1)/include/openssl ${PYTHON_BUILD}/openssl/include
-        mkdir -p ${PYTHON_BUILD}/gettext/lib
-        cp $(brew --prefix gettext)/lib/*.a ${PYTHON_BUILD}/gettext/lib
-        export SSL="--with-openssl=${PYTHON_BUILD}/openssl"
         LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
@@ -74,7 +66,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
     export LDFLAGS="`pkg-config --static --libs ${PKGS}` ${LDFLAGS}"
 
-    ./configure --prefix $1 $2 --enable-optimizations ${SSL}
+    ./configure --prefix $1 $2 --enable-optimizations
     make -j4 build_all
     make install
   )
