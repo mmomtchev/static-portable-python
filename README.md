@@ -9,8 +9,6 @@ It supports the following platforms
  * macOS Apple Silicon
 
 It supports the following Python versions
- * Python 3.10
- * Python 3.11
  * Python 3.12
 
 It is used by
@@ -45,7 +43,7 @@ On Windows, the shared library is always built:
 ```cmd
 set PYTHON_DIST=%cd%\dist
 set PYTHON_BUILD=%cd%\build
-set PYTHON_VERSION=3.12.3
+set PYTHON_VERSION=3.12.6
 build_python.bat %cd%\output
 ```
 
