@@ -54,6 +54,10 @@ jobs:
           key: conan-${{ matrix.platform }}
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
+      - name: show config log
+        run: cat build/*/config.log
+        shell: bash
+        if: always()
       - name: Test
         run: bash test/run_tests.sh
         env:
