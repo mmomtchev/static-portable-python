@@ -52,10 +52,10 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
 
     case `uname` in
       'Linux')
-        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS}"
-        LIBS="`pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
+        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
+        LIBS="`pkg-config --static --libs sqlite3`"
         PKGS="${PKGS} sqlite3 readline"
-        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
+        export ZLIB_LIBS="`pkg-config --static --libs zlib` -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
