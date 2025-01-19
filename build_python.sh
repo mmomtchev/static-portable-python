@@ -80,6 +80,6 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   for CERT in $1/cert/root-*; do
       mv ${CERT} ${CERT}.pem
   done
-  `pkg-config --variable=bindir openssl`/c_rehash $1/cert
+  perl `pkg-config --variable=bindir openssl`/c_rehash $1/cert
   echo SSL_CERT_DIR=$1/cert
 fi
