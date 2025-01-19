@@ -56,7 +56,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         PKGS="${PKGS} sqlite3 readline"
         export ZLIB_LIBS="`pkg-config --static --libs zlib` -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
-        export LIBS="${LIBS} -lrt"
+        export POSIXSHMEM_LIBS="-lrt"
         ;;
       'Darwin')
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
