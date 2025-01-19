@@ -13,6 +13,10 @@ test_sqlite3() {
   ${PYTHON} -E -s -c "import sqlite3; assert(type(sqlite3.apilevel) == str)"
 }
 
+test_ssl() {
+  ${PYTHON} -E -s -c 'import urllib.request; contents = urllib.request.urlopen("https://www.duckduckgo.com").read()'
+}
+
 run_test() {
     local test_name=$1
     echo "Testing $test_name"
@@ -39,7 +43,8 @@ main() {
     if [ -z "${PYTHON}" ]; then
       PYTHON=`which python`
     fi
-    echo "Testing using ${PYTHON}"
+    export SSL_CERT_DIR=`dirname ${PYTHON}`/cert
+    echo "Testing using ${PYTHON}, SSL_CERT_DIR=${SSL_CERT_DIR}"
     ${PYTHON} -E -s -c "from pprint import pp; import sys; pp(sys.path)"
     echo "============"
     local error_count=0

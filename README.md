@@ -26,7 +26,7 @@ If building a standalone executable:
 ```shell
 PYTHON_DIST=$(pwd)/dist   \
 PYTHON_BUILD=$(pwd)/build \
-PYTHON_VERSION=3.12.3     \
+PYTHON_VERSION=3.12.6     \
 bash build_python.sh $(pwd)/output
 ```
 
@@ -34,7 +34,7 @@ If building a shared library:
 ```shell
 PYTHON_DIST=$(pwd)/dist   \
 PYTHON_BUILD=$(pwd)/build \
-PYTHON_VERSION=3.12.3     \
+PYTHON_VERSION=3.12.6     \
 bash build_python.sh $(pwd)/output --enable-shared
 ```
 
