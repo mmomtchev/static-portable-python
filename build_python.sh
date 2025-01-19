@@ -52,7 +52,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
 
     case `uname` in
       'Linux')
-        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} `pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
+        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS}"
+        LIBS="`pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
         PKGS="${PKGS} sqlite3 readline"
         export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
@@ -63,7 +64,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         ;;
     esac
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
-    export LDFLAGS="`pkg-config --static --libs ${PKGS}` ${LDFLAGS} -lm"
+    export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
+    export LDFLAGS="${LDFLAGS}"
 
     ./configure --prefix $1 $2 --enable-optimizations
     make -j4 build_all
