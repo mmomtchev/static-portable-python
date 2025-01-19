@@ -15,3 +15,7 @@ class PythonDeps(ConanFile):
     if self.settings.os == 'Linux':
       self.requires('sqlite3/3.46.1')
       self.requires('readline/8.2')
+
+  def configure(self):
+    self.options['sqlite3'].enable_fts3 = True
+    self.options['sqlite3'].enable_fts4 = True
