@@ -63,7 +63,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         ;;
     esac
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
-    export LDFLAGS="`pkg-config --static --libs ${PKGS}` ${LDFLAGS}"
+    export LDFLAGS="`pkg-config --static --libs ${PKGS}` ${LDFLAGS} -lm"
 
     ./configure --prefix $1 $2 --enable-optimizations
     make -j4 build_all
