@@ -58,7 +58,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         ;;
       'Darwin')
-        LDFLAGS="-Wl,-search_paths_first -L${PYTHON_BUILD}/gettext/lib -Wl,-rpath,@loader_path/../lib"
+        LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
@@ -72,4 +72,14 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   rm -f $1/python
   [ ! -r $1/bin/python3 ] && ln -s python${SHORT_VERSION} $1/bin/python3
   ln -s bin/python3 $1/python
+
+  # Get the curl certificates
+  curl https://curl.se/ca/cacert.pem --output $1/cacert.pem
+  csplit -k -f $1/root- $1/cacert.pem '/END CERTIFICATE/+1' {500}
+  mkdir -p $1/cert
+  for CERT in $1/root-*; do
+    mv $1/${CERT} $1/cert/${CERT}.pem
+  done
+  `pkg-config --variable=bindir openssl`/c_rehash $1/cert
+  echo SSL_CERT_DIR=$1/cert
 fi
