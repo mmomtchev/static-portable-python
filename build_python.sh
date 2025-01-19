@@ -50,7 +50,6 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       patch < ${PATCH}
     done
 
-    export PY_UNSUPPORTED_OPENSSL_BUILD=static
     case `uname` in
       'Linux')
         LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-Bstatic ${LDFLAGS} `pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
