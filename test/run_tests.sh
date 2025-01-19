@@ -43,7 +43,7 @@ main() {
     if [ -z "${PYTHON}" ]; then
       PYTHON=`which python`
     fi
-    export SSL_CERT_DIR=`dirname ${PYTHON}`/../cert
+    export SSL_CERT_DIR=`dirname ${PYTHON}`/cert
     echo "Testing using ${PYTHON}, SSL_CERT_DIR=${SSL_CERT_DIR}"
     ${PYTHON} -E -s -c "from pprint import pp; import sys; pp(sys.path)"
     echo "============"
