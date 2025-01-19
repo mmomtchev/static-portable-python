@@ -75,10 +75,10 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
 
   # Get the curl certificates
   curl https://curl.se/ca/cacert.pem --output $1/cacert.pem
-  csplit -k -f $1/root- $1/cacert.pem '/END CERTIFICATE/+1' {500}
   mkdir -p $1/cert
-  for CERT in $1/root-*; do
-    mv $1/${CERT} $1/cert/${CERT}.pem
+  csplit -k -f $1/cert/root- $1/cacert.pem '/END CERTIFICATE/+1' {500}
+  for CERT in $1/cert/root-*; do
+      mv ${CERT} ${CERT}.pem
   done
   `pkg-config --variable=bindir openssl`/c_rehash $1/cert
   echo SSL_CERT_DIR=$1/cert
