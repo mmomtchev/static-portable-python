@@ -16,6 +16,9 @@ class PythonDeps(ConanFile):
       self.requires('sqlite3/3.46.1')
       self.requires('readline/8.2')
 
+    if self.settings.os == 'Macos':
+      self.requires('mpdecimal/4.0.0')
+
   def configure(self):
     self.options['sqlite3'].enable_fts3 = True
     self.options['sqlite3'].enable_fts4 = True
