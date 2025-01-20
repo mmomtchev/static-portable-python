@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma gettext openssl"
+  PKGS="zlib bzip2 liblzma libgettext openssl"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}

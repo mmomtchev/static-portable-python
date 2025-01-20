@@ -9,7 +9,7 @@ class PythonDeps(ConanFile):
     self.requires('xz_utils/5.4.5')
     self.requires('bzip2/1.0.8')
     self.requires('openssl/3.3.2')
-    self.requires('gettext/0.22.5')
+    self.requires('libgettext/0.22')
 
     # These libraries are part of the OS on macOS, but are optional on Linux
     if self.settings.os == 'Linux':
