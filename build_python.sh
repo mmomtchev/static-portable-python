@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma libgettext openssl"
+  PKGS="zlib bzip2 liblzma libgettext openssl ncurses uuid"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -49,6 +49,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     for PATCH in ${ROOT}/patches/python-${SHORT_VERSION}-*.patch; do
       patch < ${PATCH}
     done
+
+    export LIBUUID_CFLAGS="`pkg-config --cflags uuid`"
+    export LIBUUID_LIBS="`pkg-config --libs uuid`"
 
     case `uname` in
       'Linux')
