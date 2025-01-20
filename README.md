@@ -2,14 +2,15 @@
 
 It does not make any assumptions about any installed libraries on the host system nor the directory where it is installed and it supports installing additional modules via `pip`.
 
-It supports the following platforms
- * Windows x64
- * Linux x64
- * macOS x64
- * macOS Apple Silicon
+It has been tested on the following platforms
+ * Windows 2019 x64
+ * Ubuntu 20.04, 22.4 and 24.4 x64
+ * macOS 13 x64
+ * macOS 14 Apple Silicon
 
-It supports the following Python versions
+It has been tested on the following Python versions
  * Python 3.12
+ * Python 3.13
 
 It is used by
  * `pymport` which builds an embeddable shared library

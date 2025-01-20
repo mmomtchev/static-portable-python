@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma gettext openssl"
+  PKGS="zlib bzip2 liblzma libgettext openssl"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -54,12 +54,14 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       'Linux')
         LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
         PKGS="${PKGS} sqlite3 readline"
-        export LIBS="-Wl,-Bstatic ${LDFLAGS} `pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
         export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         export POSIXSHMEM_LIBS="-lrt"
         ;;
       'Darwin')
+        PKGS="${PKGS} mpdecimal-libmpdecimal"
+        export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
+        export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
@@ -79,6 +81,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   # Get the curl certificates
   curl https://curl.se/ca/cacert.pem --output $1/cacert.pem
   mkdir -p $1/cert
+  rm -f $1/cert/root-*
   csplit -k -f $1/cert/root- $1/cacert.pem '/END CERTIFICATE/+1' {500}
   for CERT in $1/cert/root-*; do
       mv ${CERT} ${CERT}.pem
