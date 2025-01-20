@@ -1,6 +1,6 @@
---- configure.orig	2024-04-09 10:09:14
-+++ configure	2025-01-20 16:15:36
-@@ -13639,14 +13639,14 @@
+--- configure.orig	2025-01-20 16:12:31
++++ configure	2025-01-20 16:14:01
+@@ -13813,14 +13813,14 @@
  
  
  # check if we need libintl for locale functions
@@ -18,7 +18,7 @@
  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
  
-@@ -13679,7 +13679,7 @@
+@@ -13853,7 +13853,7 @@
  
  printf "%s\n" "#define WITH_LIBINTL 1" >>confdefs.h
  
@@ -27,18 +27,3 @@
  fi
  
  
-@@ -28208,7 +28208,14 @@
-   -l*) :
- 
-         libname=$(echo $arg | cut -c3-)
-+        case `uname` in
-+          Linux)
-         new_OPENSSL_LIBS="$new_OPENSSL_LIBS -l:lib${libname}.a -Wl,--exclude-libs,lib${libname}.a"
-+            ;;
-+          Darwin)
-+            new_OPENSSL_LIBS="$new_OPENSSL_LIBS -Wl,-hidden-l${libname}"
-+            ;;
-+        esac
-        ;; #(
-   *) :
-     new_OPENSSL_LIBS="$new_OPENSSL_LIBS $arg"
