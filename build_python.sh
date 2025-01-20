@@ -60,6 +60,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         ;;
       'Darwin')
         PKGS="${PKGS} mpdecimal-libmpdecimal"
+        export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
+        export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
