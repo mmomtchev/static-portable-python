@@ -80,7 +80,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   rm -f $1/python
   [ ! -r $1/bin/python3 ] && ln -s python${SHORT_VERSION} $1/bin/python3
   cp wrapper.sh $1/python
-  chmod 755 wrapper.sh
+  chmod 755 $1/python
 
   # Get the curl certificates
   curl https://curl.se/ca/cacert.pem --output $1/cacert.pem
