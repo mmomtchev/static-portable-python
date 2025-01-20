@@ -54,7 +54,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       'Linux')
         LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
         PKGS="${PKGS} sqlite3 readline"
-        export ZLIB_LIBS="`pkg-config --static --libs zlib` -ldl"
+        export LIBS="-Wl,-Bstatic ${LDFLAGS} `pkg-config --static --libs sqlite3` -Wl,-Bdynamic"
+        export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         export POSIXSHMEM_LIBS="-lrt"
         ;;

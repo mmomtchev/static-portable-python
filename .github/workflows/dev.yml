@@ -16,10 +16,10 @@ jobs:
         platform:
           - ubuntu-20.04
           - ubuntu-22.04
+          - ubuntu-24.04
           - macos-13
           - macos-14
         python-version:
-          - 3.10.15
           - 3.12.6
 
     env:
@@ -50,9 +50,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.conan_home.outputs.CONAN_HOME }}
-          key: ${{ runner.os }}-${{ runner.arch }}
+          key: conan-${{ matrix.platform }}
       - name: Build Python
         run: bash build_python.sh ${{ env.PYTHON_TARGET }}
+      - name: show config log
+        run: cat build/*/config.log
+        shell: bash
+        if: always()
       - name: Test
         run: bash test/run_tests.sh
         env:
@@ -77,7 +81,6 @@ jobs:
           - windows-2019
           - windows-2022
         python-version:
-          - 3.10.16
           - 3.12.8
 
     env:
