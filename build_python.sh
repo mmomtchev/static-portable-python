@@ -50,6 +50,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       patch < ${PATCH}
     done
 
+    export LIBUUID_CFLAGS="`pkg-config --cflags uuid`"
+    export LIBUUID_LIBS="`pkg-config --libs uuid`"
+
     case `uname` in
       'Linux')
         LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
