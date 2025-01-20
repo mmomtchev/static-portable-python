@@ -68,7 +68,7 @@ jobs:
       - name: Check linked libraries
         run: |
           echo 'Main executable'
-          ${{ steps.ldd.outputs.ldd }} ${{ env.PYTHON_TARGET }}/python
+          ${{ steps.ldd.outputs.ldd }} ${{ env.PYTHON_TARGET }}/bin/python3
           echo 'Modules'
           find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \; | egrep -o '\s/[a-zA-Z/][-a-zA-Z0-9_\./]+' | sort | uniq
 

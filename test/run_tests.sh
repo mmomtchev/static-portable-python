@@ -43,8 +43,7 @@ main() {
     if [ -z "${PYTHON}" ]; then
       PYTHON=`which python`
     fi
-    export SSL_CERT_FILE=`dirname ${PYTHON}`/cacert.pem
-    echo "Testing using ${PYTHON}, SSL_CERT_FILE=${SSL_CERT_FILE}"
+    echo "Testing using ${PYTHON}"
     ${PYTHON} -E -s -c "from pprint import pp; import sys; pp(sys.path)"
     echo "============"
     local error_count=0
