@@ -59,7 +59,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export POSIXSHMEM_LIBS="-lrt"
         ;;
       'Darwin')
-        PKGS="${PKGS} mpdecimal"
+        PKGS="${PKGS} libmpdec"
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
