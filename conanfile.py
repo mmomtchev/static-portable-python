@@ -12,6 +12,7 @@ class PythonDeps(ConanFile):
     self.requires('libuuid/1.0.3')
     self.requires('ncurses/6.5')
     self.requires('libgettext/0.22')
+    self.requires('gdbm/1.23')
 
     # These libraries are part of the OS on macOS, but are optional on Linux
     if self.settings.os == 'Linux':
@@ -24,3 +25,6 @@ class PythonDeps(ConanFile):
   def configure(self):
     self.options['sqlite3'].enable_fts3 = True
     self.options['sqlite3'].enable_fts4 = True
+
+    if self.settings.os == 'Macos':
+      self.options['gdbm'].libgdbm_compat = True
