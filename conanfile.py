@@ -25,4 +25,6 @@ class PythonDeps(ConanFile):
   def configure(self):
     self.options['sqlite3'].enable_fts3 = True
     self.options['sqlite3'].enable_fts4 = True
-    self.options['gdbm'].libgdbm_compat = True
+
+    if self.settings.os == 'Macos':
+      self.options['gdbm'].libgdbm_compat = True
