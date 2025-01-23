@@ -25,7 +25,7 @@ If building a standalone executable:
 ```shell
 PYTHON_DIST=$(pwd)/dist   \
 PYTHON_BUILD=$(pwd)/build \
-PYTHON_VERSION=3.12.6     \
+PYTHON_VERSION=3.12.8     \
 bash build_python.sh $(pwd)/output
 ```
 
@@ -33,7 +33,7 @@ If building a shared library:
 ```shell
 PYTHON_DIST=$(pwd)/dist   \
 PYTHON_BUILD=$(pwd)/build \
-PYTHON_VERSION=3.12.6     \
+PYTHON_VERSION=3.12.8     \
 bash build_python.sh $(pwd)/output --enable-shared
 ```
 
@@ -44,7 +44,7 @@ On Windows, the shared library is always built:
 ```cmd
 set PYTHON_DIST=%cd%\dist
 set PYTHON_BUILD=%cd%\build
-set PYTHON_VERSION=3.12.6
+set PYTHON_VERSION=3.12.8
 build_python.bat %cd%\output
 ```
 
