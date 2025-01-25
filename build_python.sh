@@ -72,9 +72,20 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
+
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
     export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
     export LDFLAGS="${LDFLAGS}"
+
+    case `uname` in
+      'Darwin')
+        LIBS=`echo $LIBS | sed -e 's/-l/-Wl,-hidden-l/g'`
+        ;;
+    esac
+
+    echo "Building with CFLAGS=${CFLAGS}"
+    echo "Building with LIBS=${LIBS}"
+    echo "Building with LDFLAGS=${LDFLAGS}"
 
     ./configure --prefix $1 $2 --enable-optimizations
     make -j4 build_all
