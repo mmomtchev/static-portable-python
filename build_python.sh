@@ -15,18 +15,11 @@ fi
 SHORT_VERSION=`echo ${PYTHON_VERSION} | cut -f 1,2 -d "."`
 
 case `uname` in
-  'Linux')
-    LIBNAME="$1/lib/libpython${SHORT_VERSION}.so"
-    CONAN_PROFILE="-pr linux.profile"
-    ;;
-  'Darwin')
-    LIBNAME="$1/lib/libpython${SHORT_VERSION}.dylib"
-    CONAN_PROFILE=""
-    ;;
-  *)
-    echo 'Unsupported platform for the builtin Python interpreter'
-    exit 1
-    ;;
+  'Linux') LIBNAME="$1/lib/libpython${SHORT_VERSION}.so" ;;
+  'Darwin') LIBNAME="$1/lib/libpython${SHORT_VERSION}.dylib" ;;
+  *) echo 'Unsupported platform for the builtin Python interpreter'
+     exit 1
+     ;;
 esac
 
 if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
@@ -34,7 +27,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   echo Getting conan dependencies
   echo ${SEP}
   conan profile detect --exist-ok
-  conan install . ${CONAN_PROFILE} -of conan --build=missing
+  conan install . -of conan --build=missing
   source conan/conanbuild.sh
 
   echo ${SEP}
@@ -65,7 +58,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
 
     case `uname` in
       'Linux')
-        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS}"
+        LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS} -Wl,--exclude-libs,ALL"
         PKGS="${PKGS} sqlite3 readline"
         export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
