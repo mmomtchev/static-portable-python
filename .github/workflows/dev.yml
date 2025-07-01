@@ -16,6 +16,7 @@ jobs:
         platform:
           - ubuntu-22.04
           - ubuntu-24.04
+          - ubuntu-22.04-arm
           - macos-13
           - macos-14
         python-version:
@@ -78,8 +79,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - windows-2019
           - windows-2022
+          - windows-2025
+          - windows-11-arm
         python-version:
           - 3.12.10
           - 3.13.3

@@ -3,8 +3,11 @@
 It does not make any assumptions about any installed libraries on the host system nor the directory where it is installed and it supports installing additional modules via `pip`.
 
 It has been tested on the following platforms
- * Windows 2019 x64
- * Ubuntu 20.04, 22.4 and 24.4 x64
+ * Windows 2022 x64
+ * Windows 2025 x64
+ * Windows 11 arm64
+ * Ubuntu 22.04 and 24.04 x64
+ * Ubuntu 22.04 arm64
  * macOS 13 x64
  * macOS 14 Apple Silicon
 
