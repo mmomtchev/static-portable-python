@@ -10,7 +10,7 @@ It has been tested on the following platforms
 
 It has been tested on the following Python versions
  * Python 3.12
- * Python 3.13
+ * Python 3.13 (Python 3.13.4 has a Windows build problem: https://github.com/python/cpython/issues/135151)
 
 It is used by
  * `pymport` which builds an embeddable shared library
