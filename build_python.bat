@@ -34,7 +34,7 @@ if not exist "%1\python3*.lib" (
   tar -C %PYTHON_BUILD% -zxf %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz
   %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PCBuild\build.bat -p %ARCH%
   if not exist %1\DLLs mkdir %1\DLLs
-  if not exist %1\DLLs mkdir %1\libs
+  if not exist %1\libs mkdir %1\libs
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PCBuild\%ARCH_DIR% %1\DLLs /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\Lib %1\lib /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\Include %1\include /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
