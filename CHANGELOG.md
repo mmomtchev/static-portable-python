@@ -1,6 +1,7 @@
-#
+# 2025-07-02
 
 - Get OpenSSL from conan and include root CA certificates from the CURL project
+- Support Windows and Linux arm64
 
 # 2024-07-01
 
