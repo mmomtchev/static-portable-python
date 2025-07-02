@@ -41,6 +41,7 @@ if not exist "%1\python3*.lib" (
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\Include %1\include /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
   copy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PC\pyconfig.h %1\include
   move "%1\DLLs\*.exe" %1
+  move "%1\DLLs\*.dll" %1
   move "%1\DLLs\python3*.*" %1\libs
   set PYTHONHOME=%~1
   %1\python -m ensurepip
