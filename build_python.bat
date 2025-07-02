@@ -11,10 +11,15 @@ if not exist %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz (
   curl https://www.python.org/ftp/python/%PYTHON_VERSION%/Python-%PYTHON_VERSION%.tgz --output %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz
 )
 
+echo "Windows CPU Architecture : %PROCESSOR_ARCHITECTURE% / %PROCESSOR_ARCHITEW6432%"
+
 if %PROCESSOR_ARCHITECTURE%==AMD64 (
   set ARCH=x64
   set ARCH_DIR=amd64
 ) else if %PROCESSOR_ARCHITECTURE%==ARM64 (
+  set ARCH=ARM64
+  set ARCH_DIR=arm64
+) else if %PROCESSOR_ARCHITEW6432%==ARM64 (
   set ARCH=ARM64
   set ARCH_DIR=arm64
 ) else (
