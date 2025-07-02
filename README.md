@@ -2,7 +2,7 @@
 
 It does not make any assumptions about any installed libraries on the host system nor the directory where it is installed and it supports installing additional modules via `pip`.
 
-It has been tested on the following platforms
+It has been tested on the following platforms:
  * Windows 2022 x64
  * Windows 2025 x64
  * Windows 11 arm64
@@ -11,13 +11,13 @@ It has been tested on the following platforms
  * macOS 13 x64
  * macOS 14 Apple Silicon
 
-It has been tested on the following Python versions
+It has been tested on the following Python versions:
  * Python 3.12
  * Python 3.13 (Python 3.13.4 has a Windows build problem: https://github.com/python/cpython/issues/135151)
 
-It is used by
- * `pymport` which builds an embeddable shared library
- * `@mmomtchev/python-xpack` which builds a standalone executable
+It is used by:
+ * [`pymport`](https://github.com/mmomtchev/pymport) which builds an embeddable shared library
+ * [`@mmomtchev/python-xpack`](https://github.com/mmomtchev/python-xpack) which builds a standalone executable
 
 
 # Usage
@@ -53,6 +53,6 @@ build_python.bat %cd%\output
 
 This will produce a moveable Python installation in `output`.
 
-Currently, the build is not fully reproducible as it will include the static versions of the system libraries.
+On Windows, the fully integrated Python build is used.
 
-A future version might use `conan` for a fully reproducible build.
+On macOS and Linux, static versions of the needed libraries are retrieved from `conan`.
