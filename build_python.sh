@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="openssl ncurses zlib bzip2 liblzma gettext"
+  PKGS="openssl ncurses zlib bzip2 liblzma libgettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -50,8 +50,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
       patch < ${PATCH}
     done
 
-    export LIBUUID_CFLAGS="`pkg-config --cflags libuuid`"
-    export LIBUUID_LIBS="`pkg-config --libs libuuid`"
+    export LIBUUID_CFLAGS="`pkg-config --cflags uuid`"
+    export LIBUUID_LIBS="`pkg-config --libs uuid`"
 
     export GDBM_CFLAGS="`pkg-config --cflags gdbm`"
     export GDBM_LIBS="`pkg-config --libs gdbm`"
