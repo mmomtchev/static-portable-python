@@ -1,3 +1,7 @@
+# 2025-07-04
+
+- Avoid any homebrew libraries on macOS
+
 # 2025-07-02
 
 - Get OpenSSL from conan and include root CA certificates from the CURL project
