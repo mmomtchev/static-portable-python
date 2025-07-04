@@ -63,6 +63,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         export POSIXSHMEM_LIBS="-lrt"
+        export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
         ;;
       'Darwin')
         PKGS="${PKGS} mpdecimal-libmpdecimal"
@@ -74,12 +75,12 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         #  that are actually in the shared cache and the Apple iconv is
         #  one of them, that's why -L/usr/lib should come after conan)
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
-        export LIBS="-Z -L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
+        export LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
+        export LIBS="-Z `pkg-config --static --libs ${PKGS}` ${LIBS}"
         ;;
     esac
 
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
-    export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
     export LDFLAGS="${LDFLAGS}"
 
     case `uname` in
