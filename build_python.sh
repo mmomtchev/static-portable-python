@@ -56,6 +56,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export GDBM_CFLAGS="`pkg-config --cflags gdbm`"
     export GDBM_LIBS="`pkg-config --libs gdbm`"
 
+    export DBM_CFLAGS="`pkg-config --cflags db`"
+    export DBM_LIBS="`pkg-config --libs db`"
+
     case `uname` in
       'Linux')
         LDFLAGS="-Wl,-z,origin -Wl,-rpath,'\$\$ORIGIN/../lib' ${LDFLAGS} -Wl,--exclude-libs,ALL"
@@ -78,12 +81,10 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         MACOS_LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
         export LIBS="-Wl,-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
         export GDBM_LIBS="-Wl,-Z ${GDBM_LIBS} ${MACOS_LIBS}"
+        export DBM_LIBS="-Wl,-Z ${DBM_LIBS} ${MACOS_LIBS}"
         export LIBUUID_LIBS="-Wl,-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
         ;;
     esac
-
-    export DBM_CFLAGS=${GDBM_CFLAGS}
-    export DBM_LIBS=${GDBM_LIBS}
 
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
     export LDFLAGS="${LDFLAGS}"
