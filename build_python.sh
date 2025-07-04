@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma libgettext openssl ncurses uuid gdbm"
+  PKGS="openssl ncurses uuid gdbm zlib bzip2 liblzma libgettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -69,9 +69,12 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
         export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
         # Avoid homebrew in /usr/local/lib
-        LDFLAGS="-Z -L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks"
-        LDFLAGS="${LDFLAGS} -Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
-        export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
+        # Careful to avoid the Apple mess with the shared cache
+        # (Recent versions of macOS contain hidden libraries in /usr/lib
+        #  that are actually in the shared cache and the Apple iconv is
+        #  one of them, that's why -L/usr/lib should come after conan)
+        LDFLAGS="-Z -Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
+        export LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
         ;;
     esac
 
