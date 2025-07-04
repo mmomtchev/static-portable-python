@@ -68,7 +68,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         PKGS="${PKGS} mpdecimal-libmpdecimal"
         export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
         export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
-        LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
+        # Avoid homebrew in /usr/local/lib
+        LDFLAGS="-Z -L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks"
+        LDFLAGS="${LDFLAGS} -Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
         ;;
     esac
