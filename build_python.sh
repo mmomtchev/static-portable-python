@@ -56,8 +56,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export GDBM_CFLAGS="`pkg-config --cflags gdbm`"
     export GDBM_LIBS="`pkg-config --libs gdbm`"
 
-    export DBM_CFLAGS="`pkg-config --cflags db`"
-    export DBM_LIBS="`pkg-config --libs db`"
+    export DBM_CFLAGS="`pkg-config --cflags libdb`"
+    export DBM_LIBS="`pkg-config --libs libdb`"
 
     case `uname` in
       'Linux')
