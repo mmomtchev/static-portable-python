@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="openssl ncurses gdbm zlib bzip2 liblzma libgettext"
+  PKGS="openssl ncurses zlib bzip2 liblzma libgettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -81,6 +81,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBUUID_LIBS="-Wl,-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
         ;;
     esac
+
+    export DBM_CFLAGS=${GDBM_CFLAGS}
+    export DBM_LIBS=${GDBM_LIBS}
 
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
     export LDFLAGS="${LDFLAGS}"
