@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="openssl ncurses uuid gdbm zlib bzip2 liblzma libgettext"
+  PKGS="openssl ncurses zlib bzip2 liblzma libgettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -77,6 +77,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         MACOS_LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
         export LIBS="-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
+        export GDBM_LIBS="-Z ${GDBM_LIBS} ${MACOS_LIBS}"
+        export LIBUUID_LIBS="-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
         ;;
     esac
 
