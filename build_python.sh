@@ -76,9 +76,9 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         #  one of them, that's why -L/usr/lib should come after conan)
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
         MACOS_LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
-        export LIBS="-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
-        export GDBM_LIBS="-Z ${GDBM_LIBS} ${MACOS_LIBS}"
-        export LIBUUID_LIBS="-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
+        export LIBS="-Wl,-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
+        export GDBM_LIBS="-Wl,-Z ${GDBM_LIBS} ${MACOS_LIBS}"
+        export LIBUUID_LIBS="-Wl,-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
         ;;
     esac
 
