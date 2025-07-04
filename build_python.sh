@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="openssl ncurses zlib bzip2 liblzma libgettext"
+  PKGS="openssl ncurses zlib bzip2 liblzma gettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -56,8 +56,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     export GDBM_CFLAGS="`pkg-config --cflags gdbm`"
     export GDBM_LIBS="`pkg-config --libs gdbm`"
 
-    export DBM_CFLAGS="`pkg-config --cflags libdb`"
-    export DBM_LIBS="`pkg-config --libs libdb`"
+    export DBM_CFLAGS="${GDBM_CFLAGS}"
+    export DBM_LIBS="${GDBM_LIBS}"
 
     case `uname` in
       'Linux')
@@ -70,8 +70,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         ;;
       'Darwin')
         PKGS="${PKGS} mpdecimal-libmpdecimal"
-        export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
-        export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
+        export LIBMPDEC_CFLAGS=`pkg-config --cflags mpdecimal-libmpdecimal`
+        export LIBMPDEC_LIBS=`pkg-config --libs mpdecimal-libmpdecimal`
         # Avoid homebrew in /usr/local/lib
         # Careful to avoid the Apple mess with the shared cache
         # (Recent versions of macOS contain hidden libraries in /usr/lib

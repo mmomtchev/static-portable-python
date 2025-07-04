@@ -13,7 +13,6 @@ class PythonDeps(ConanFile):
     self.requires('ncurses/6.5')
     self.requires('libgettext/0.22')
     self.requires('gdbm/1.23')
-    self.requires('libdb/5.3.28')
 
     # These libraries are part of the OS on macOS, but are optional on Linux
     if self.settings.os == 'Linux':
