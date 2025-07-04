@@ -75,8 +75,8 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         #  that are actually in the shared cache and the Apple iconv is
         #  one of them, that's why -L/usr/lib should come after conan)
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
-        export LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
-        export LIBS="-Z `pkg-config --static --libs ${PKGS}` ${LIBS}"
+        MACOS_LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
+        export LIBS="-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
         ;;
     esac
 
