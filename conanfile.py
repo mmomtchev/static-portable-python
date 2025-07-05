@@ -24,7 +24,7 @@ class PythonDeps(ConanFile):
       self.requires('mpdecimal/4.0.0')
       # libdb is not supported on Apple Silicon
       # however on macOS 14+ there is native ndb support
-      if self.settings.arch != 'armv8' and platform.mac_ver()[0].split('.')[0] < 14:
+      if self.settings.arch != 'armv8' and int(platform.mac_ver()[0].split('.')[0]) < 14:
         self.requires('libdb/5.3.28')
 
   def configure(self):
