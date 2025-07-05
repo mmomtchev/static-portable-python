@@ -82,6 +82,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export LIBS="-Wl,-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
         export GDBM_LIBS="-Wl,-Z ${GDBM_LIBS} ${MACOS_LIBS}"
         export LIBUUID_LIBS="-Wl,-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
+        DB_ORDER="--with-dbmliborder=bdb:ndbm:gdbm"
         ;;
     esac
 
@@ -98,7 +99,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     echo "Building with LIBS=${LIBS}"
     echo "Building with LDFLAGS=${LDFLAGS}"
 
-    ./configure --prefix $1 $2 --enable-optimizations
+    ./configure --prefix $1 $2 --enable-optimizations ${DB_ORDER}
     make -j4 build_all
     make install
   )
