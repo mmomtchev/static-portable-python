@@ -71,6 +71,9 @@ jobs:
           ${{ steps.ldd.outputs.ldd }} ${{ env.PYTHON_TARGET }}/python
           echo 'Modules'
           find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \; | egrep -o '\s/[a-zA-Z/][-a-zA-Z0-9_\./]+' | sort | uniq
+      - name: Check linked libraries (raw output)
+        run: |
+          find ${{ env.PYTHON_TARGET }} -name '*.so' -exec ${{ steps.ldd.outputs.ldd }} {} \;
 
   build_python_windows:
     runs-on: ${{ matrix.platform }}
