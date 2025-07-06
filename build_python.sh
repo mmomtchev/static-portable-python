@@ -31,7 +31,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
   source conan/conanbuild.sh
 
   echo ${SEP}
-  PKGS="zlib bzip2 liblzma libgettext openssl ncurses uuid gdbm"
+  PKGS="openssl ncurses zlib bzip2 liblzma libgettext"
   echo "conan CFLAGS=${CFLAGS}"
   echo "conan LDFLAGS=${LDFLAGS}"
   echo ${SEP}
@@ -63,18 +63,30 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
         export ZLIB_LIBS="-Wl,-Bstatic `pkg-config --static --libs zlib` -Wl,-Bdynamic -ldl"
         export LIBFFI_LIBS="-l:libffi_pic.a -Wl,--exclude-libs,libffi_pic.a"
         export POSIXSHMEM_LIBS="-lrt"
+        export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
         ;;
       'Darwin')
         PKGS="${PKGS} mpdecimal-libmpdecimal"
-        export LIBMPDEC_CFLAGS="pkg-config --cflags mpdecimal-libmpdecimal"
-        export LIBMPDEC_LIBS="pkg-config --libs mpdecimal-libmpdecimal"
+        if pkg-config --exists libdb
+          then PKGS="${PKGS} libdb"
+        fi
+        export LIBMPDEC_CFLAGS=`pkg-config --cflags mpdecimal-libmpdecimal`
+        export LIBMPDEC_LIBS=`pkg-config --libs mpdecimal-libmpdecimal`
+        # Avoid homebrew in /usr/local/lib
+        # Careful to avoid the Apple mess with the shared cache
+        # (Recent versions of macOS contain hidden libraries in /usr/lib
+        #  that are actually in the shared cache and the Apple iconv is
+        #  one of them, that's why -L/usr/lib should come after conan)
         LDFLAGS="-Wl,-search_paths_first -Wl,-rpath,@loader_path/../lib"
-        export LIBS="-liconv -framework CoreFoundation ${LDFLAGS}"
+        MACOS_LIBS="-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -framework CoreFoundation"
+        export LIBS="-Wl,-Z `pkg-config --static --libs ${PKGS}` ${MACOS_LIBS}"
+        export GDBM_LIBS="-Wl,-Z ${GDBM_LIBS} ${MACOS_LIBS}"
+        export LIBUUID_LIBS="-Wl,-Z ${LIBUUID_LIBS} ${MACOS_LIBS}"
+        DB_ORDER="--with-dbmliborder=bdb:ndbm:gdbm"
         ;;
     esac
 
     export CFLAGS="`pkg-config --static --cflags ${PKGS}` ${CFLAGS}"
-    export LIBS="`pkg-config --static --libs ${PKGS}` ${LIBS}"
     export LDFLAGS="${LDFLAGS}"
 
     case `uname` in
@@ -87,7 +99,7 @@ if [ ! -d "$1" ] || [ ! -r "${LIBNAME}" ]; then
     echo "Building with LIBS=${LIBS}"
     echo "Building with LDFLAGS=${LDFLAGS}"
 
-    ./configure --prefix $1 $2 --enable-optimizations
+    ./configure --prefix $1 $2 --enable-optimizations ${DB_ORDER}
     make -j4 build_all
     make install
   )
