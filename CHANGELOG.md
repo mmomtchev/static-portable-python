@@ -1,5 +1,9 @@
 # 2025-07-04
 
+- Point the default directory for OpenSSL on macOS to the system root certificates in `/etc/ssl`
+
+# 2025-07-04
+
 - Avoid any homebrew libraries on macOS
 
 # 2025-07-02
