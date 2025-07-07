@@ -33,3 +33,4 @@ class PythonDeps(ConanFile):
 
     if self.settings.os == 'Macos':
       self.options['gdbm'].libgdbm_compat = True
+      self.options['openssl'].openssldir = '/etc/ssl'
