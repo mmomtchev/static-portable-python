@@ -86,8 +86,8 @@ jobs:
           - windows-2025
           - windows-11-arm
         python-version:
-          - 3.12.10
-          - 3.13.3
+          - 3.12.12
+          - 3.13.9
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
