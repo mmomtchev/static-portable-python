@@ -4,6 +4,8 @@ cd %mypath:~0,-1%
 set PYTHONHOME=
 set PYTHONPATH=
 
+dir "%ProgramFiles%\Microsoft Visual Studio\2026\*\VC\Tools\MSVC"
+
 if not exist %PYTHON_DIST% mkdir %PYTHON_DIST%
 if not exist %PYTHON_BUILD% mkdir %PYTHON_BUILD%
 if not exist %1 mkdir %1
