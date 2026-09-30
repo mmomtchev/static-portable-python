@@ -105,6 +105,10 @@ jobs:
           path: ${{ env.PYTHON_DIST }}
           key: ${{ matrix.python-version }}
           enableCrossOsArchive: true
+      - name: Set MSVC tools to v145 on arm64
+        shell: bash
+        run: echo BUILD_OPTS="/p:PlatformToolset=v145" >> $GITHUB_ENV
+        if: runner.arch == 'arm64'
       - name: Build Python
         run: build_python.bat ${{ env.PYTHON_TARGET }}
         shell: cmd
