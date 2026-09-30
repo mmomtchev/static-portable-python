@@ -4,8 +4,6 @@ cd %mypath:~0,-1%
 set PYTHONHOME=
 set PYTHONPATH=
 
-dir "%ProgramFiles%\Microsoft Visual Studio\2026\*\VC\Tools\MSVC"
-
 if not exist %PYTHON_DIST% mkdir %PYTHON_DIST%
 if not exist %PYTHON_BUILD% mkdir %PYTHON_BUILD%
 if not exist %1 mkdir %1
@@ -35,7 +33,7 @@ if not exist "%1\python3*.lib" (
   rd /q /s %PYTHON_BUILD%\Python-%PYTHON_VERSION%
 
   tar -C %PYTHON_BUILD% -zxf %PYTHON_DIST%\Python-%PYTHON_VERSION%.tgz
-  %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PCBuild\build.bat -p %ARCH% "/p:PlatformToolset=v180"
+  %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PCBuild\build.bat -p %ARCH% "/p:PlatformToolset=v145"
   if not exist %1\DLLs mkdir %1\DLLs
   if not exist %1\libs mkdir %1\libs
   (robocopy %PYTHON_BUILD%\Python-%PYTHON_VERSION%\PCBuild\%ARCH_DIR% %1\DLLs /MIR) ^& if %ERRORLEVEL% leq 1 set ERRORLEVEL = 0
