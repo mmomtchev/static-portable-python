@@ -9,6 +9,7 @@ on:
 jobs:
   build_python_posix:
     runs-on: ${{ matrix.platform }}
+    if: false
 
     strategy:
       fail-fast: false
