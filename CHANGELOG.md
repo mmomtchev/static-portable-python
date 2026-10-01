@@ -1,3 +1,8 @@
+# 2026-10-01
+
+- Tweak the build workflow to work with Visual Studio 2026 in Github Actions, at the moment the arm64 builds must use MSVC tools v145 as this is the only toolset installed
+- Enable PGO to workaround [cpython#153668](https://github.com/python/cpython/issues/153668)
+
 # 2025-07-04
 
 - Point the default directory for OpenSSL on macOS to the system root certificates in `/etc/ssl`

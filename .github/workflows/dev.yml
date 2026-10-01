@@ -20,8 +20,8 @@ jobs:
           - macos-15
           - macos-15-intel
         python-version:
-          - 3.12.12
-          - 3.13.9
+          - 3.12.14
+          - 3.13.15
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -86,8 +86,8 @@ jobs:
           - windows-2025
           - windows-11-arm
         python-version:
-          - 3.12.12
-          - 3.13.9
+          - 3.12.14
+          - 3.13.15
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -104,6 +104,14 @@ jobs:
           path: ${{ env.PYTHON_DIST }}
           key: ${{ matrix.python-version }}
           enableCrossOsArchive: true
+      - name: Set MSVC tools to v145 on arm64
+        shell: bash
+        run: echo BUILD_OPTS="/p:PlatformToolset=v145" >> $GITHUB_ENV
+        if: runner.arch == 'arm64'
+      - name: Set MSVC tools to v143 on x86-64
+        shell: bash
+        run: echo BUILD_OPTS="/p:PlatformToolset=v143" >> $GITHUB_ENV
+        if: runner.arch == 'x64'
       - name: Build Python
         run: build_python.bat ${{ env.PYTHON_TARGET }}
         shell: cmd

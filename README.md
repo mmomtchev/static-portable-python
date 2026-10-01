@@ -53,6 +53,8 @@ build_python.bat %cd%\output
 
 This will produce a moveable Python installation in `output`.
 
+Optionally, `BUILD_OPTS` can be used to pass additional build options such as `BUILD_OPTS="/p:PlatformToolset=v145"`. At the moment the Github Actions builds use MSVC tools v143 on Windows 2025 x86 and MSVC tools v145 on Windows 11 arm64 as this is what is available.
+
 On Windows, the fully integrated Python build is used.
 
 On macOS and Linux, static versions of the needed libraries are retrieved from `conan`.
