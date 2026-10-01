@@ -109,6 +109,10 @@ jobs:
         shell: bash
         run: echo BUILD_OPTS="/p:PlatformToolset=v145" >> $GITHUB_ENV
         if: runner.arch == 'arm64'
+      - name: Set MSVC tools to v143 on x86-64
+        shell: bash
+        run: echo BUILD_OPTS="/p:PlatformToolset=v143" >> $GITHUB_ENV
+        if: runner.arch == 'x64'
       - name: Build Python
         run: build_python.bat ${{ env.PYTHON_TARGET }}
         shell: cmd
